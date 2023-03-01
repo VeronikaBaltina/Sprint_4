@@ -9,10 +9,8 @@ import java.util.List;
 
 public class Order {
     private static final String PAGE_URL = "https://qa-scooter.praktikum-services.ru/";
-    // локатор кнопки Заказать снизу гл стр
-    private static final By ORDER_BUTTON_AT_THE_BOTTOM = By.xpath(".//div[@class='Home_FinishButton__1_cWm']/button[text() = 'Заказать']");
-    // локатор кнопки Заказать сверху гл стр
-    private static final By ORDER_BUTTON_ON_TOP = By.xpath(".//div[@class='Header_Nav__AGCXC']/button[text() = 'Заказать']");
+    // локатор кнопок Заказать на главной странице
+    private static final By ORDER_BUTTON_LIST = By.xpath(".//button[text() = 'Заказать']");
     // локатор поля Имя
     private static final By FIELD_FOR_ENTERING_THE_NAME_IN_THE_ORDER = By.xpath(".//input[@placeholder = '* Имя']");
     // локатор поля Фамилия
@@ -55,16 +53,6 @@ public class Order {
     // открыть стр сайта
     public void openAWebsiteToOrderAScooter() {
         driver.get(PAGE_URL);
-    }
-    // нажать на кнопку заказа cнизу
-    public void clickOnTheOrderButtonAtTheBottom() {
-        WebElement element = driver.findElement(ORDER_BUTTON_AT_THE_BOTTOM);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", element);
-        driver.findElement(ORDER_BUTTON_AT_THE_BOTTOM).click();
-    }
-    // нажать на кнопку заказа cверху
-    public void clickOnTheOrderButtonAtTheTop() {
-        driver.findElement(ORDER_BUTTON_ON_TOP).click();
     }
     // Ввести в поле "Имя" имя
     public void fillInTheNameField(String name) {
@@ -137,5 +125,13 @@ public class Order {
     // Проверить, что появилось всплывающее окно с сообщением об успешном создании заказа
     public boolean isSuccessfulMessageAppeared() {
         return driver.findElement(SUCCESSFUL_ORDER_MESSAGE).isDisplayed();
+    }
+
+    // Нажать на кнопку Заказать
+    public void clickOrderButton(int orderButtonIdx) {
+        List<WebElement> list = driver.findElements(ORDER_BUTTON_LIST);
+        WebElement button = list.get(orderButtonIdx);
+        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();", button);
+        button.click();
     }
 }

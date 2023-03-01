@@ -21,13 +21,14 @@ public class OrderingAScooter {
     private final String phoneNumber;
     private final int orderDateIdx;
     private final int rentalPeriodIdx;
+    private final int orderButtonIdx;
     private final int colorOfTheScooterIdx;
     private final String comment;
     private final boolean expected;
 
     private WebDriver driver;
 
-    public OrderingAScooter(String name, String surname, String address, int metroStationIdx, String phoneNumber, int orderDateIdx, int rentalPeriodIdx, int colorOfTheScooterIdx, String comment, boolean expected) {
+    public OrderingAScooter(String name, String surname, String address, int metroStationIdx, String phoneNumber, int orderDateIdx, int rentalPeriodIdx, int colorOfTheScooterIdx, String comment,int orderButtonIdx, boolean expected) {
         this.name = name;
         this.surname = surname;
         this.address = address;
@@ -37,14 +38,15 @@ public class OrderingAScooter {
         this.rentalPeriodIdx = rentalPeriodIdx;
         this.colorOfTheScooterIdx = colorOfTheScooterIdx;
         this.comment = comment;
+        this.orderButtonIdx = orderButtonIdx;
         this.expected = expected;
     }
 
     @Parameterized.Parameters
     public static Object[][] getSuccessfulOrder() {
         return new Object[][]{
-                {"Вероника", "Балтина", "Москва, Ивантеевская улица, 25", 1, "89999999999", 1, 2, 0, "домофон работает", true},
-                {"Кирилл", "Балтин", "Москва", 2, "+79999999991", 0, 1, 1, "домофон не работает", true},
+                {"Вероника", "Балтина", "Москва, Ивантеевская улица, 25", 1, "89999999999", 1, 2, 0, "домофон работает", 0, true},
+                {"Кирилл", "Балтин", "Москва", 2, "+79999999991", 0, 1, 1, "домофон не работает", 1, true},
         };
     }
 
@@ -58,31 +60,10 @@ public class OrderingAScooter {
     }
 
     @Test
-    public void orderAScooterUsingTheOrderButtonAtTheBottom() {
+    public void makeAnOrder() {
         Order page = new Order(driver);
         page.openAWebsiteToOrderAScooter();
-        page.clickOnTheOrderButtonAtTheBottom();
-        page.fillInTheNameField(name);
-        page.fillInTheLastNameField(surname);
-        page.fillInTheAddressField(address);
-        page.chooseAMetroStation(metroStationIdx);
-        page.fillInThePhoneNumberField(phoneNumber);
-        page.clickOnTheNextButton();
-        page.selectTheOrderDate(orderDateIdx);
-        page.selectTheRentalPeriod(rentalPeriodIdx);
-        page.chooseTheColorOfTheScooter(colorOfTheScooterIdx);
-        page.leaveACommentToTheCourier(comment);
-        page.clickTheOrderButtonOnTheOrderPage();
-        page.confirmTheOrder();
-        boolean actual = page.isSuccessfulMessageAppeared();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void orderAScooterUsingTheOrderButtonOnTop() {
-        Order page = new Order(driver);
-        page.openAWebsiteToOrderAScooter();
-        page.clickOnTheOrderButtonAtTheTop();
+        page.clickOrderButton(orderButtonIdx);
         page.fillInTheNameField(name);
         page.fillInTheLastNameField(surname);
         page.fillInTheAddressField(address);
